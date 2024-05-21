@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Text;
+using System.Text.Json;
 
 namespace Microsoft.EntityFrameworkCore.Storage;
 
@@ -178,6 +179,47 @@ public class RelationalSqlGenerationHelper : ISqlGenerationHelper
         }
 
         DelimitIdentifier(builder, name);
+    }
+
+    /// <summary>
+    ///     Generates the escaped SQL representation of an identifier (column name, table name, etc.).
+    /// </summary>
+    /// <param name="identifier">The identifier to be escaped.</param>
+    /// <returns>The generated string.</returns>
+    public virtual string EscapeJsonPathElement(string identifier)
+        => JsonEncodedText.Encode(identifier).Value.Replace("\"", "\\\"", StringComparison.Ordinal);
+
+    /// <summary>
+    ///     Writes the escaped SQL representation of an identifier (column name, table name, etc.).
+    /// </summary>
+    /// <param name="builder">The <see cref="StringBuilder" /> to write generated string to.</param>
+    /// <param name="identifier">The identifier to be escaped.</param>
+    public virtual void EscapeJsonPathElement(StringBuilder builder, string identifier)
+    {
+        var encodedIdentifier = JsonEncodedText.Encode(identifier).Value.Replace("\"", "\\\"", StringComparison.Ordinal);
+        builder.Append(encodedIdentifier);
+    }
+
+    /// <summary>
+    ///     Writes the delimited SQL representation of an element in a JSON path.
+    /// </summary>
+    /// <param name="pathElement">The JSON path element to delimit.</param>
+    /// <returns>The generated string.</returns>
+    public virtual string DelimitJsonPathElement(string pathElement)
+        => pathElement.Any(x => !char.IsAsciiLetterOrDigit(x))
+            ? $"\"{EscapeJsonPathElement(pathElement)}\""
+            : pathElement;
+
+    /// <summary>
+    ///     Writes the delimited SQL representation of an element in a JSON path.
+    /// </summary>
+    /// <param name="builder">The <see cref="StringBuilder" /> to write generated string to.</param>
+    /// <param name="pathElement">The JSON path element to delimit.</param>
+    public void DelimitJsonPathElement(StringBuilder builder, string pathElement)
+    {
+        builder.Append('"');
+        EscapeJsonPathElement(builder, pathElement);
+        builder.Append('"');
     }
 
     /// <summary>

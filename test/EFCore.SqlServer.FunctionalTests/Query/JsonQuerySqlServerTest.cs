@@ -429,8 +429,8 @@ FROM [JsonEntitiesCustomNaming] AS [j]
         await base.Custom_naming_projection_owned_reference(async);
 
         AssertSql(
-            """
-SELECT JSON_QUERY([j].[json_reference_custom_naming], '$.CustomOwnedReferenceBranch'), [j].[Id]
+"""
+SELECT JSON_QUERY([j].[json_reference_custom_naming], '$."Custom#OwnedReferenceBranch\u0060-=[]\\;\u0027,./~!@#$%^\u0026*()_\u002B{}|:\u0022\u003C\u003E?\u72EC\u89D2\u517D\u03C0\u7368\u89D2\u7378"'), [j].[Id]
 FROM [JsonEntitiesCustomNaming] AS [j]
 """);
     }
@@ -452,8 +452,8 @@ ORDER BY [j].[Id]
         await base.Custom_naming_projection_owned_scalar(async);
 
         AssertSql(
-            """
-SELECT CAST(JSON_VALUE([j].[json_reference_custom_naming], '$.CustomOwnedReferenceBranch.CustomFraction') AS float)
+"""
+SELECT CAST(JSON_VALUE([j].[json_reference_custom_naming], '$."Custom#OwnedReferenceBranch\u0060-=[]\\;\u0027,./~!@#$%^\u0026*()_\u002B{}|:\u0022\u003C\u003E?\u72EC\u89D2\u517D\u03C0\u7368\u89D2\u7378"."\u30E6\u30CB\u30B3\u30FC\u30F3Fraction\u4E00\u89D2\u7363"') AS float)
 FROM [JsonEntitiesCustomNaming] AS [j]
 """);
     }
@@ -463,8 +463,8 @@ FROM [JsonEntitiesCustomNaming] AS [j]
         await base.Custom_naming_projection_everything(async);
 
         AssertSql(
-            """
-SELECT [j].[Id], [j].[Title], [j].[json_collection_custom_naming], [j].[json_reference_custom_naming], [j].[json_reference_custom_naming], JSON_QUERY([j].[json_reference_custom_naming], '$.CustomOwnedReferenceBranch'), [j].[json_collection_custom_naming], JSON_QUERY([j].[json_reference_custom_naming], '$.CustomOwnedCollectionBranch'), JSON_VALUE([j].[json_reference_custom_naming], '$.CustomName'), CAST(JSON_VALUE([j].[json_reference_custom_naming], '$.CustomOwnedReferenceBranch.CustomFraction') AS float)
+"""
+SELECT [j].[Id], [j].[Title], [j].[json_collection_custom_naming], [j].[json_reference_custom_naming], [j].[json_reference_custom_naming], JSON_QUERY([j].[json_reference_custom_naming], '$."Custom#OwnedReferenceBranch\u0060-=[]\\;\u0027,./~!@#$%^\u0026*()_\u002B{}|:\u0022\u003C\u003E?\u72EC\u89D2\u517D\u03C0\u7368\u89D2\u7378"'), [j].[json_collection_custom_naming], JSON_QUERY([j].[json_reference_custom_naming], '$.CustomOwnedCollectionBranch'), JSON_VALUE([j].[json_reference_custom_naming], '$.CustomName'), CAST(JSON_VALUE([j].[json_reference_custom_naming], '$."Custom#OwnedReferenceBranch\u0060-=[]\\;\u0027,./~!@#$%^\u0026*()_\u002B{}|:\u0022\u003C\u003E?\u72EC\u89D2\u517D\u03C0\u7368\u89D2\u7378"."\u30E6\u30CB\u30B3\u30FC\u30F3Fraction\u4E00\u89D2\u7363"') AS float)
 FROM [JsonEntitiesCustomNaming] AS [j]
 """);
     }
@@ -2423,7 +2423,7 @@ WHERE CAST(JSON_VALUE([j].[Reference], '$.TestInt16') AS smallint) <> CAST(3 AS 
         await base.Json_predicate_on_int32(async);
 
         AssertSql(
-            """
+"""
 SELECT [j].[Id], [j].[TestBooleanCollection], [j].[TestBooleanCollectionCollection], [j].[TestByteCollection], [j].[TestCharacterCollection], [j].[TestCharacterCollectionCollection], [j].[TestDateTimeCollection], [j].[TestDateTimeOffsetCollection], [j].[TestDecimalCollection], [j].[TestDefaultStringCollection], [j].[TestDefaultStringCollectionCollection], [j].[TestDoubleCollection], [j].[TestDoubleCollectionCollection], [j].[TestEnumCollection], [j].[TestEnumWithIntConverterCollection], [j].[TestGuidCollection], [j].[TestInt16Collection], [j].[TestInt16CollectionCollection], [j].[TestInt32Collection], [j].[TestInt32CollectionCollection], [j].[TestInt64Collection], [j].[TestInt64CollectionCollection], [j].[TestMaxLengthStringCollection], [j].[TestMaxLengthStringCollectionCollection], [j].[TestNullableEnumCollection], [j].[TestNullableEnumCollectionCollection], [j].[TestNullableEnumWithConverterThatHandlesNullsCollection], [j].[TestNullableEnumWithIntConverterCollection], [j].[TestNullableEnumWithIntConverterCollectionCollection], [j].[TestNullableInt32Collection], [j].[TestNullableInt32CollectionCollection], [j].[TestSignedByteCollection], [j].[TestSingleCollection], [j].[TestSingleCollectionCollection], [j].[TestTimeSpanCollection], [j].[TestUnsignedInt16Collection], [j].[TestUnsignedInt32Collection], [j].[TestUnsignedInt64Collection], [j].[Collection], [j].[Reference]
 FROM [JsonEntitiesAllTypes] AS [j]
 WHERE CAST(JSON_VALUE([j].[Reference], '$.TestInt32') AS int) <> 33 OR CAST(JSON_VALUE([j].[Reference], '$.TestInt32') AS int) IS NULL
